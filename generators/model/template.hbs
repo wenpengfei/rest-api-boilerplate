@@ -1,1 +1,46 @@
-{{properCase name }} model
+import Promise from 'bluebird';
+import mongoose from 'mongoose';
+import httpStatus from 'http-status';
+import APIError from '../helpers/APIError';
+
+const {{properCase name}}Schema = new mongoose.Schema({
+  // example: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'InviteCode'
+  //   type: String,
+  //   required: true,
+  //   default: 'INACTIVE',
+  //   enum: ['ACTIVE', 'INACTIVE']
+  // },
+}, {
+  timestamps: true
+});
+
+{{properCase name}}Schema.method({
+});
+
+{{properCase name}}Schema.statics = {
+  get(id) {
+    return this.findById(id)
+      .exec()
+      .then(({{camelCase name}}) => {
+        if ({{camelCase name}}) {
+          return {{camelCase name}};
+        }
+        const err = new APIError('No such {{camelCase name}} exists!', httpStatus.NOT_FOUND);
+        return Promise.reject(err);
+      });
+  },
+
+  list({ pageIndex = 1, pageSize = 20, search } = {}) {
+    pageIndex = Number.parseInt(pageIndex)
+    pageSize = Number.parseInt(pageSize)
+    return this.find(search)
+      .sort({ createdAt: -1 })
+      .skip((pageIndex - 1) * pageSize)
+      .limit(pageSize)
+      .exec();
+  }
+};
+
+export default mongoose.model('{{properCase name}}', {{properCase name}}Schema);

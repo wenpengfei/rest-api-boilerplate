@@ -1,1 +1,56 @@
-{{properCase name }} controller
+import {{properCase name}} from '../models/{{camelCase name}}.model';
+import R from 'ramda'
+
+function load(req, res, next, id) {
+  {{properCase name}}.get(id)
+    .then(({{camelCase name}}) => {
+      req.{{camelCase name}} = {{camelCase name}}; // eslint-disable-line no-param-reassign
+      return next();
+    })
+    .catch(e => next(e));
+}
+
+function get(req, res) {
+  return res.json(req.{{camelCase name}});
+}
+
+function create(req, res, next) {
+  const {{camelCase name}} = new {{properCase name}}({
+    // owner: req.body.owner,
+  });
+  {{camelCase name}}.save()
+    .then(saved{{properCase name}} => res.json(saved{{properCase name}}))
+    .catch(e => next(e));
+}
+
+function update(req, res, next) {
+  const {{camelCase name}} = req.{{camelCase name}};
+  // {{camelCase name}}.owner = req.body.owner;
+
+  {{camelCase name}}.save()
+    .then(saved{{properCase name}} => res.json(saved{{properCase name}}))
+    .catch(e => next(e));
+}
+
+function list(req, res, next) {
+  const { pageSize = 20, pageIndex = 1 } = req.query;
+  const search = R.pick([''])(req.query);
+  {{properCase name}}.find().count(search, (err, totalCount) => {
+    {{properCase name}}.list({ pageSize, pageIndex, search })
+      .then({{camelCase name}}s => res.json({
+        pageSize: Number.parseInt(pageSize),
+        pageIndex: Number.parseInt(pageIndex),
+        totalCount: Number.parseInt(totalCount),
+        data: {{camelCase name}}s }))
+      .catch(e => next(e));
+  });
+}
+
+function remove(req, res, next) {
+  const {{camelCase name}} = req.{{camelCase name}};
+  {{camelCase name}}.remove()
+    .then(deleted{{properCase name}} => res.json(deleted{{properCase name}}))
+    .catch(e => next(e));
+}
+
+export default { load, get, create, update, list, remove };

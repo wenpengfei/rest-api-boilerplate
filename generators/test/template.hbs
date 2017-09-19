@@ -1,1 +1,122 @@
-{{properCase name }} test
+import mongoose from 'mongoose';
+import request from 'supertest-as-promised';
+import httpStatus from 'http-status';
+import chai, { expect } from 'chai';
+import app from '../../index';
+
+chai.config.includeStack = true;
+
+/**
+ * root level hooks -
+ */
+after((done) => {
+  // required because https://github.com/Automattic/mongoose/issues/1251#issuecomment-65793092
+  mongoose.models = {};
+  mongoose.modelSchemas = {};
+  mongoose.connection.close();
+  done();
+});
+
+describe('## {{properCase name}} APIs', () => {
+  let {{camelCase name}} = {
+    // owner: 'owner',
+    // note: 'note'
+  };
+
+  describe('# POST /{{camelCase name}}s', () => {
+    it('should create a new {{camelCase name}}', (done) => {
+      request(app)
+        .post('/{{camelCase name}}s')
+        .send({{camelCase name}})
+        .expect(httpStatus.OK)
+        .then((res) => {
+          // expect(res.body.{{camelCase name}}name).to.equal({{camelCase name}}.{{camelCase name}}name);
+          // expect(res.body.mobileNumber).to.equal({{camelCase name}}.mobileNumber);
+          {{camelCase name}} = res.body;
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('# GET /{{camelCase name}}s/:{{camelCase name}}Id', () => {
+    it('should get {{camelCase name}} details', (done) => {
+      request(app)
+        .get(`/{{camelCase name}}s/${ {{camelCase name}}._id}`)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          // expect(res.body.{{camelCase name}}name).to.equal({{camelCase name}}.{{camelCase name}}name);
+          // expect(res.body.mobileNumber).to.equal({{camelCase name}}.mobileNumber);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should report error with message - Not found, when {{camelCase name}} does not exists', (done) => {
+      request(app)
+        .get('/{{camelCase name}}s/56c787ccc67fc16ccc1a5e92')
+        .expect(httpStatus.NOT_FOUND)
+        .then((res) => {
+          expect(res.body.message).to.equal('Not Found');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('# PUT /{{camelCase name}}s/:{{camelCase name}}Id', () => {
+    it('should update {{camelCase name}} details', (done) => {
+      // {{camelCase name}}.owner = 'asd';
+      // {{camelCase name}}.note = 'sssKK';
+      request(app)
+        .put(`/{{camelCase name}}s/${ {{camelCase name}}._id}`)
+        .send({{camelCase name}})
+        .expect(httpStatus.OK)
+        .then((res) => {
+          // expect(res.body.owner).to.equal('asd');
+          // expect(res.body.note).to.equal('sssKK');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('# GET /{{camelCase name}}s/', () => {
+    it('should get all {{camelCase name}}s', (done) => {
+      request(app)
+        .get('/{{camelCase name}}s')
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body.data).to.be.an('array');
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should get all {{camelCase name}}s (with pageSize and pageIndex)', (done) => {
+      request(app)
+        .get('/{{camelCase name}}s')
+        .query({ pageSize: 10, pageIndex: 1 })
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body.data).to.be.an('array');
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('# DELETE /{{camelCase name}}s/', () => {
+    it('should delete {{camelCase name}}', (done) => {
+      request(app)
+        .delete(`/{{camelCase name}}s/${ {{camelCase name}}._id}`)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          // expect(res.body.owner).to.equal('asd');
+          // expect(res.body.note).to.equal('sssKK');
+          done();
+        })
+        .catch(done);
+    });
+  });
+});

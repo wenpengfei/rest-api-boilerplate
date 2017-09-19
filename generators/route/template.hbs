@@ -1,1 +1,16 @@
-{{properCase name }} route
+import express from 'express';
+import {{camelCase name}}Ctrl from '../controllers/{{camelCase name}}.controller';
+const router = express.Router(); // eslint-disable-line new-cap
+
+router.route('/')
+  .get({{camelCase name}}Ctrl.list)
+  .post({{camelCase name}}Ctrl.create);
+
+router.route('/:{{camelCase name}}Id')
+  .get({{camelCase name}}Ctrl.get)
+  .put({{camelCase name}}Ctrl.update)
+  .delete({{camelCase name}}Ctrl.remove);
+
+router.param('{{camelCase name}}Id', {{camelCase name}}Ctrl.load);
+
+export default router;
